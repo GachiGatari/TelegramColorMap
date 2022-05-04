@@ -1,11 +1,8 @@
-from func import get_color
-from bot_handlers import image_handler, start_handler
+from prod.bot_handlers import image_handler, start_handler
 import configparser
-import json
 import logging
 
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Updater, CallbackContext, MessageHandler, CallbackQueryHandler,Filters, CommandHandler
+from telegram.ext import Updater, MessageHandler, Filters, CommandHandler
 
 
 

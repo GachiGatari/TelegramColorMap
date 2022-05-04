@@ -12,5 +12,5 @@ le = preprocessing.LabelEncoder()
 # clf_tree.fit(df['Color'].values.reshape(-1, 1), df['Map'].values,)
 
 
-loaded_model = pickle.load(open('finalized_model.sav', 'rb'))
+loaded_model = pickle.load(open('../prod/finalized_model.sav', 'rb'))
 print(loaded_model.predict([[9]]))

@@ -56,8 +56,6 @@ def get_clean_color(color):
 
 def get_color(image_path: str):
     actual_name, closer_name = get_colour_name(most_frequent_colour(Image.open(image_path))[1])
-    print(actual_name)
-    print(closer_name)
     if actual_name:
         return get_clean_color(actual_name)
     else:
@@ -78,7 +76,7 @@ def get_route_by_color(color):
     }
     if not color:
         color = random.randint(1,10)
-    model = pickle.load(open('finalized_model.sav', 'rb'))
+    model = pickle.load(open('prod/finalized_model.sav', 'rb'))
     return model.predict([[color_dict[color]]])
 
 
@@ -108,5 +106,5 @@ def send_route(update: Update, context: CallbackContext, image_name):
 
 
     context.bot.send_message(update.message.chat.id, route[0])
-    context.bot.send_message(update.message.chat.id, "Если у тебя изменилось настроение, закрась картинку снова и отправь мне!")
+    context.bot.send_message(update.message.chat.id, "Если у тебя изменилось настроение, закрась картинку снова и отправь мне!\nА если ты хочешь начать сначала и получить шаблон нажми /start")
     os.remove(image_name)
