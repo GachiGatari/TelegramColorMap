@@ -50,7 +50,7 @@ def get_clean_color(color):
         if match:
             return color[match.span()[0]:match.span()[1]]
 
-    return random.choice(pattern_list)
+    return "no_match"
 
 
 
@@ -65,19 +65,20 @@ def get_color(image_path: str):
 def get_route_by_color(color):
     color_dict = {
         'blue': 1,
-        'green': 2,
-        'red': 3,
-        'orange': 4,
-        'yellow': 5,
+        'green': 3,
+        'red': 4,
+        'orange': 5,
+        'yellow': 7,
         'violet': 6,
-        'brown': 7,
-        'black': 8,
-        'white': 9
+        'brown': 2,
+        'black': 0,
+        'white': 7
     }
     if not color:
         color = random.randint(1,10)
     model = pickle.load(open('prod/finalized_model.sav', 'rb'))
-    return model.predict([[color_dict[color]]])
+    route = random.choice(str(model.predict([[color_dict[color]]])).split('.'))
+    return route
 
 
 def send_route(update: Update, context: CallbackContext, image_name):
@@ -86,7 +87,7 @@ def send_route(update: Update, context: CallbackContext, image_name):
         'green': 'У Вас преобладает зелёный цвет. Зелёный  символизирует чувство уверенности, настойчивость, иногда упрямство. Рекомендуемый релаксационный маршрут:',
         'red': 'У Вас преобладает красный цвет. Красный символизирует силу волевого усилия, агрессивность, наступательные тенденции, возбуждение. Рекомендуемый релаксационный маршрут:',
         'orange': 'У Вас преобладает оранжевый цвет. Оранжевый символизирует силу волевого усилия, агрессивность, наступательные тенденции, возбуждение. Рекомендуемый релаксационный маршрут:',
-        'yellow': 'У Вас преобладает оранжевый цвет. Оранжевый символизирует силу волевого усилия, агрессивность, наступательные тенденции, возбуждение. Рекомендуемый релаксационный маршрут:',
+        'yellow': 'У Вас преобладает желтый цвет. Желтый символизирует активность, стремление к общению, экспансивность, веселость. Рекомендуемый релаксационный маршрут:',
         'violet': 'У Вас преобладает фиолетовый цвет. Фиолетовый символизирует негативные тенденции: тревожность, стресс, переживание страха, огорчения. Рекомендуемый релаксационный маршрут:',
         'brown': 'У Вас преобладает коричневый цвет. Коричневый символизирует негативные тенденции: тревожность, стресс, переживание страха, огорчения. Рекомендуемый релаксационный маршрут:',
         'black': 'У Вас преобладает черный цвет. Черный символизирует негативные тенденции: тревожность, стресс, переживание страха, огорчения. Рекомендуемый релаксационный маршрут:',
@@ -98,13 +99,21 @@ def send_route(update: Update, context: CallbackContext, image_name):
 
     color = get_color(image_name)
 
-    route = get_route_by_color(color)
+    if color == "no_match":
+        route = get_route_by_color("blue")
+        context.bot.send_sticker(update.message.chat.id, open(f'stickers/blue.tgs', 'rb'))
+        context.bot.send_message(update.message.chat.id, "Извините, но у нас нет маргрута для вашего цвета(\nНо знаете, у нас есть рекомендации под люое настроени! Вот они:")
+        context.bot.send_message(update.message.chat.id, route[2:])
+    else:
 
-    context.bot.send_sticker(update.message.chat.id, open(f'stickers/{color}.tgs','rb'))
-    context.bot.send_message(update.message.chat.id, comment_dict[color])
+        route = get_route_by_color(color)
+
+        context.bot.send_sticker(update.message.chat.id, open(f'stickers/{color}.tgs','rb'))
+        context.bot.send_message(update.message.chat.id, comment_dict[color])
 
 
 
-    context.bot.send_message(update.message.chat.id, route[0])
-    context.bot.send_message(update.message.chat.id, "Если у тебя изменилось настроение, закрась картинку снова и отправь мне!\nА если ты хочешь начать сначала и получить шаблон нажми /start")
+        context.bot.send_message(update.message.chat.id, route[2:])
+        context.bot.send_message(update.message.chat.id, "Если у тебя изменилось настроение, закрась картинку снова и отправь мне!\nА если ты хочешь начать сначала и получить шаблон нажми /start")
+
     os.remove(image_name)
