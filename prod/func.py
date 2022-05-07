@@ -68,7 +68,7 @@ def get_route_by_color(color):
         'green': 3,
         'red': 4,
         'orange': 5,
-        'yellow': 7,
+        'yellow': 8,
         'violet': 6,
         'brown': 2,
         'black': 0,
@@ -98,6 +98,7 @@ def send_route(update: Update, context: CallbackContext, image_name):
 
 
     color = get_color(image_name)
+    print(color)
 
     if color == "no_match":
         route = get_route_by_color("blue")
@@ -114,6 +115,6 @@ def send_route(update: Update, context: CallbackContext, image_name):
 
 
         context.bot.send_message(update.message.chat.id, route[2:])
-        context.bot.send_message(update.message.chat.id, "Если у тебя изменилось настроение, закрась картинку снова и отправь мне!\nА если ты хочешь начать сначала и получить шаблон нажми /start")
+    context.bot.send_message(update.message.chat.id, "Если у тебя изменилось настроение, закрась картинку снова и отправь мне!\nА если ты хочешь начать сначала и получить шаблон нажми /start")
 
     os.remove(image_name)
