@@ -69,10 +69,10 @@ def get_route_by_color(color):
         'red': 4,
         'orange': 5,
         'yellow': 8,
-        'violet': 6,
-        'brown': 2,
-        'black': 0,
-        'white': 7
+        'violet': -1,
+        'brown': -1,
+        'black': -1,
+        'white': -1
     }
     if not color:
         color = random.randint(1,10)
@@ -98,7 +98,6 @@ def send_route(update: Update, context: CallbackContext, image_name):
 
 
     color = get_color(image_name)
-    print(color)
 
     if color == "no_match":
         route = get_route_by_color("blue")

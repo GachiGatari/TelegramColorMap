@@ -9,4 +9,4 @@ def image_handler(update: Update, context: CallbackContext):
 
 def start_handler(update: Update, context: CallbackContext):
     context.bot.send_message(update.message.chat.id, "Здравствуйте! Вас приветствует LaVa-бот. Как Вы себя чувствуете? Какое у Вас настроение? Давайте это проверим. Раскрасьте картинку, и я предложу Вам индивидуальный релаксационный маршрут. Let's go!")
-    context.bot.send_photo(update.message.chat.id, open('template.jpg', 'rb'))
+    context.bot.send_photo(update.message.chat.id, open('prod/template.jpg', 'rb'))
